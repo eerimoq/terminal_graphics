@@ -6,10 +6,10 @@ import re
 
 def find_version():
     return re.search(r"^__version__ = '(.*)'$",
-                     open('termimage/version.py', 'r').read(),
+                     open('terminal_graphics/version.py', 'r').read(),
                      re.MULTILINE).group(1)
 
-setup(name='termimage',
+setup(name='terminal_graphics',
       version=find_version(),
       description=('Images in the terminal.'),
       long_description=open('README.rst', 'r').read(),
@@ -24,12 +24,12 @@ setup(name='termimage',
           'Programming Language :: Python :: 3.9',
       ],
       keywords=['terminal', 'image'],
-      url='https://github.com/eerimoq/termimage',
-      py_modules=['termimage'],
+      url='https://github.com/eerimoq/terminal_graphics',
+      py_modules=['terminal_graphics'],
       install_requires=[
       ],
       python_requires='>=3.6',
       test_suite="tests",
       entry_points = {
-          'console_scripts': ['termimage=termimage:_main']
+          'console_scripts': ['terminal_graphics=terminal_graphics:_main']
       })

@@ -1,4 +1,4 @@
 About
 =====
 
-Who knows?!?
+Terminal graphics!
