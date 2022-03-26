@@ -1,2 +1,0 @@
-# termimage
-Who knows?!?
