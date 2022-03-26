@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from setuptools import setup
+from setuptools import find_packages
 import re
 
 
@@ -25,9 +26,8 @@ setup(name='terminal_graphics',
       ],
       keywords=['terminal', 'image'],
       url='https://github.com/eerimoq/terminal_graphics',
-      py_modules=['terminal_graphics'],
-      install_requires=[
-      ],
+      packages=find_packages(exclude=['tests']),
+      install_requires=[],
       python_requires='>=3.6',
       test_suite="tests",
       entry_points = {

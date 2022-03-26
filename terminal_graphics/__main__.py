@@ -1,6 +1,4 @@
-import sys
-
-from . import kitty
+from . import _main
 
 
-kitty.write_png(open(sys.argv[1], 'rb').read())
+_main()
