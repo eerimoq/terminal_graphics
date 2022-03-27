@@ -4,6 +4,7 @@
 
 import sys
 from base64 import b64encode
+from io import BytesIO
 
 
 def _serialize_gr_command(payload, **cmd):
@@ -23,12 +24,35 @@ def _serialize_gr_command(payload, **cmd):
 
 def _write_chunked(fout, data, **cmd):
     data = b64encode(data)
+    reader = BytesIO(data)
+    more = True
 
-    while data:
-        chunk, data = data[:4096], data[4096:]
-        m = 1 if data else 0
+    while more:
+        chunk = reader.read(4096)
+        more = (reader.tell() < len(data))
+        m = 1 if more else 0
         fout.write(_serialize_gr_command(chunk, m=m, **cmd))
         cmd.clear()
+
+
+def write_rgb(data, fout, width, height, size=None):
+    cmd = {}
+
+    if size is not None:
+        cmd['c'] = size[0]
+        cmd['r'] = size[1]
+
+    _write_chunked(fout, data, a='T', f=24, s=width, v=height, **cmd)
+
+
+def write_rgba(data, fout, width, height, size=None):
+    cmd = {}
+
+    if size is not None:
+        cmd['c'] = size[0]
+        cmd['r'] = size[1]
+
+    _write_chunked(fout, data, a='T', f=32, s=width, v=height, **cmd)
 
 
 def write_png(data, fout, size=None):

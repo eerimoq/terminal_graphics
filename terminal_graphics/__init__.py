@@ -3,22 +3,22 @@ import sys
 from io import BytesIO
 
 from PIL import Image
+import numpy
 
 from . import kitty
 from .utils import pad_ratio
 
 
-def _file_to_png_data(file, size, fill):
+def _file_to_rgba(file, size, fill):
     image = Image.open(file)
 
     if size is not None:
         if not fill:
             image = pad_ratio(image, size)
 
-    output = BytesIO()
-    image.save(output, 'png', compress_level=1)
+    image = image.convert('RGBA')
 
-    return output.getvalue()
+    return numpy.array(image), image.width, image.height
 
 
 def _main():
@@ -36,8 +36,7 @@ def _main():
         size = None
 
     for file in args.files:
-        kitty.write_png(_file_to_png_data(file, size, args.fill),
-                        sys.stdout.buffer,
-                        size)
+        data, width, height = _file_to_rgba(file, size, args.fill)
+        kitty.write_rgba(data, sys.stdout.buffer, width, height, size)
         sys.stdout.buffer.write(b'\n')
         sys.stdout.buffer.flush()
