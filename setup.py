@@ -28,7 +28,8 @@ setup(name='terminal_graphics',
       url='https://github.com/eerimoq/terminal_graphics',
       packages=find_packages(exclude=['tests']),
       install_requires=[
-          'Pillow'
+          'Pillow',
+          'numpy'
       ],
       python_requires='>=3.6',
       test_suite="tests",
