@@ -6,6 +6,9 @@ import sys
 from base64 import b64encode
 from io import BytesIO
 
+from PIL import Image
+import numpy
+
 
 def _serialize_gr_command(payload, **cmd):
     cmd = ','.join(f'{k}={v}' for k, v in cmd.items())
@@ -61,3 +64,8 @@ def write_png(data, fout, size=None):
         cmd['r'] = size[1]
 
     _write_chunked(fout, data, a='T', f=100, **cmd)
+
+
+def write(image, fout, size=None):
+    image = image.convert('RGBA')
+    write_rgba(numpy.array(image), fout, image.width, image.height, size)

@@ -9,18 +9,6 @@ from . import kitty
 from .utils import pad_ratio
 
 
-def _file_to_rgba(file, size, fill):
-    image = Image.open(file)
-
-    if size is not None:
-        if not fill:
-            image = pad_ratio(image, size)
-
-    image = image.convert('RGBA')
-
-    return numpy.array(image), image.width, image.height
-
-
 def _main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--size', help='Width and height in cells.')
@@ -36,7 +24,16 @@ def _main():
         size = None
 
     for file in args.files:
-        data, width, height = _file_to_rgba(file, size, args.fill)
-        kitty.write_rgba(data, sys.stdout.buffer, width, height, size)
+        write_file(file, sys.stdout.buffer, size, args.fill)
         sys.stdout.buffer.write(b'\n')
-        sys.stdout.buffer.flush()
+
+
+def write(image, fout, size=None, fill=False, protocol=None):
+    if size is not None and not fill:
+        image = pad_ratio(image, size)
+
+    kitty.write(image, fout, size)
+
+
+def write_file(path, fout, size=None, fill=False, protocol=None):
+    write(Image.open(path), fout, size, fill, protocol)
