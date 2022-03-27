@@ -1,5 +1,8 @@
 import argparse
 import sys
+from io import BytesIO
+
+from PIL import Image
 
 from . import kitty
 
@@ -13,10 +16,11 @@ def _main():
     args = parser.parse_args()
 
     for file in args.files:
-        with open(file, 'rb') as fin:
-            kitty.write_png(fin.read(),
-                            fout=sys.stdout.buffer,
-                            size=tuple([int(v) for v in args.size.split('x')]))
+        image = BytesIO()
+        Image.open(file).save(image, 'png')
+        kitty.write_png(image.getvalue(),
+                        fout=sys.stdout.buffer,
+                        size=tuple([int(v) for v in args.size.split('x')]))
 
         sys.stdout.buffer.write(b'\n')
         sys.stdout.buffer.flush()
