@@ -6,14 +6,17 @@ from . import kitty
 
 def _main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--size',
+    parser.add_argument('-s', '--size',
                         default='0x0',
                         help='Width and height in cells (default: 0x0).')
-    parser.add_argument('file')
+    parser.add_argument('files', nargs="+")
     args = parser.parse_args()
 
-    with open(args.file, 'rb') as fin:
-        kitty.write_png(fin.read(),
-                        size=tuple([int(v) for v in args.size.split('x')]))
+    for file in args.files:
+        with open(file, 'rb') as fin:
+            kitty.write_png(fin.read(),
+                            fout=sys.stdout.buffer,
+                            size=tuple([int(v) for v in args.size.split('x')]))
 
-    print()
+        sys.stdout.buffer.write(b'\n')
+        sys.stdout.buffer.flush()

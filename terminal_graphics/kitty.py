@@ -1,3 +1,7 @@
+#
+# https://sw.kovidgoyal.net/kitty/graphics-protocol/
+#
+
 import sys
 from base64 import b64encode
 
@@ -27,8 +31,11 @@ def _write_chunked(fout, data, **cmd):
         cmd.clear()
 
 
-def write_png(image, fout=None, size=(0, 0)):
-    if fout is None:
-        fout = sys.stdout.buffer
+def write_png(data, fout, size=None):
+    cmd = {}
 
-    _write_chunked(fout, image, a='T', f=100, c=size[0], r=size[1])
+    if size is not None:
+        cmd['c'] = size[0]
+        cmd['r'] = size[1]
+
+    _write_chunked(fout, data, a='T', f=100, **cmd)

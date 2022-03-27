@@ -27,7 +27,9 @@ setup(name='terminal_graphics',
       keywords=['terminal', 'image'],
       url='https://github.com/eerimoq/terminal_graphics',
       packages=find_packages(exclude=['tests']),
-      install_requires=[],
+      install_requires=[
+          'Pillow'
+      ],
       python_requires='>=3.6',
       test_suite="tests",
       entry_points = {
