@@ -1,7 +1,8 @@
 import unittest
+from io import BytesIO
+
 from terminal_graphics import kitty
 from terminal_graphics.utils import Size
-from io import BytesIO
 
 
 class KittyTest(unittest.TestCase):

@@ -6,9 +6,9 @@ from PIL.ImageOps import scale as scale_image
 
 from . import kitty
 from . import sixel
-from .utils import pad_ratio
-from .utils import Size
 from .terminal import get_terminal_size
+from .utils import Size
+from .utils import pad_ratio
 
 
 def _do_show(args):

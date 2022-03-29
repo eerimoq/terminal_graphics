@@ -1,7 +1,8 @@
-import termios
 import fcntl
 import struct
+import termios
 from dataclasses import dataclass
+
 from .utils import Size
 
 

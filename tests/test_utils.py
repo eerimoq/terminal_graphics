@@ -1,7 +1,10 @@
 import os
 import unittest
-from terminal_graphics import utils
+
 from PIL import Image
+
+from terminal_graphics import utils
+
 from .utils import TestCase
 
 

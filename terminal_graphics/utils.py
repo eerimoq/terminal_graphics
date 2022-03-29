@@ -1,5 +1,6 @@
-from PIL.ImageOps import pad
 from dataclasses import dataclass
+
+from PIL.ImageOps import pad
 
 
 @dataclass
