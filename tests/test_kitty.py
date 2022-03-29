@@ -1,5 +1,6 @@
 import unittest
 from terminal_graphics import kitty
+from terminal_graphics.utils import Size
 from io import BytesIO
 
 
@@ -25,7 +26,7 @@ class KittyTest(unittest.TestCase):
         output = BytesIO()
 
         with open('tests/files/box.png', 'rb') as fin:
-            kitty.write_png(fin.read(), output, (10, 5))
+            kitty.write_png(fin.read(), output, Size(10, 5))
 
         self.assertEqual(
             output.getvalue(),
