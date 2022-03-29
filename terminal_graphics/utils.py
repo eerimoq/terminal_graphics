@@ -1,4 +1,11 @@
 from PIL.ImageOps import pad
+from dataclasses import dataclass
+
+
+@dataclass
+class Size:
+    width: int
+    height: int
 
 
 def split_image_horizontally(image, number_of_images):
@@ -12,13 +19,16 @@ def split_image_horizontally(image, number_of_images):
         yield image.crop((0, y, image.width, y + height))
 
 
-def pad_ratio(image, size):
+def pad_ratio(image, size, cell_size=None):
     """Pad to fit given size. Keeps aspect ratio.
 
     """
 
+    if cell_size is None:
+        cell_size = Size(1, 2)
+
     image_ratio = image.width / image.height
-    size_ratio = size[0] / size[1] / 2
+    size_ratio = (size.width * cell_size.width) / (size.height * cell_size.height)
 
     if image_ratio < size_ratio:
         width = int(image.height * size_ratio)

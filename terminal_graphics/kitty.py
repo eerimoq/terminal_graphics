@@ -42,8 +42,8 @@ def _write_rgb_rgba(data, fout, width, height, f, size):
     cmd = {}
 
     if size is not None:
-        cmd['c'] = size[0]
-        cmd['r'] = size[1]
+        cmd['c'] = size.width
+        cmd['r'] = size.height
 
     _write_chunked(fout, data, a='T', f=f, s=width, v=height, **cmd)
 
@@ -60,8 +60,8 @@ def write_png(data, fout, size=None):
     cmd = {}
 
     if size is not None:
-        cmd['c'] = size[0]
-        cmd['r'] = size[1]
+        cmd['c'] = size.width
+        cmd['r'] = size.height
 
     _write_chunked(fout, data, a='T', f=100, **cmd)
 
