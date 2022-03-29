@@ -38,7 +38,7 @@ def _write_chunked(fout, data, **cmd):
         cmd.clear()
 
 
-def _write_rgb_rgba(data, fout, width, height, f, size):
+def _write_rgb_rgba(data, width, height, fout, f, size):
     cmd = {}
 
     if size is not None:
@@ -48,12 +48,12 @@ def _write_rgb_rgba(data, fout, width, height, f, size):
     _write_chunked(fout, data, a='T', f=f, s=width, v=height, **cmd)
 
 
-def write_rgb(data, fout, width, height, size=None):
-    _write_rgb_rgba(data, fout, width, height, 24, size)
+def write_rgb(data, width, height, fout, size=None):
+    _write_rgb_rgba(data, width, height, fout, 24, size)
 
 
-def write_rgba(data, fout, width, height, size=None):
-    _write_rgb_rgba(data, fout, width, height, 32, size)
+def write_rgba(data, width, height, fout, size=None):
+    _write_rgb_rgba(data, width, height, fout, 32, size)
 
 
 def write_png(data, fout, size=None):
