@@ -12,29 +12,28 @@ from PIL import Image
 
 def _serialize_gr_command(payload, **cmd):
     cmd = ','.join(f'{k}={v}' for k, v in cmd.items())
-    ans = []
-    ans.append(b'\033_G')
-    ans.append(cmd.encode('ascii'))
+    data = []
+    data.append(b'\033_G')
+    data.append(cmd.encode('ascii'))
 
     if payload:
-        ans.append(b';')
-        ans.append(payload)
+        data.append(b';')
+        data.append(payload)
 
-    ans.append(b'\033\\')
+    data.append(b'\033\\')
 
-    return b''.join(ans)
+    return b''.join(data)
 
 
 def _write_chunked(fout, data, **cmd):
     data = b64encode(data)
     reader = BytesIO(data)
-    more = True
+    more = 1
 
-    while more:
+    while more == 1:
         chunk = reader.read(4096)
-        more = (reader.tell() < len(data))
-        m = 1 if more else 0
-        fout.write(_serialize_gr_command(chunk, m=m, **cmd))
+        more = 1 if reader.tell() < len(data) else 0
+        fout.write(_serialize_gr_command(chunk, m=more, **cmd))
         cmd.clear()
 
 
@@ -68,4 +67,4 @@ def write_png(data, fout, size=None):
 
 def write(image, fout, size=None):
     image = image.convert('RGBA')
-    write_rgba(numpy.array(image), fout, image.width, image.height, size)
+    write_rgba(numpy.array(image), image.width, image.height, fout, size)
