@@ -29,7 +29,7 @@ def _do_show(args):
 
 def _do_info(args):
     size = get_terminal_size()
-    print(f'Rows:       {size.cells[0]}')
+    print(f'Rows:       {size.cells[1]}')
     print(f'Columns:    {size.cells[0]}')
     print(f'Width:      {size.pixels[0]}')
     print(f'Height:     {size.pixels[1]}')
