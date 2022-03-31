@@ -18,7 +18,6 @@ def main(stdscr):
     draw.text((80, 20), "Press any key to exit!")
     write(image,
           size=get_terminal_size().cells,
-          fill=True,
           move_cursor=False)
     sys.stdout.buffer.flush()
     stdscr.getkey()
