@@ -7,13 +7,12 @@ from PIL.ImageOps import scale as scale_image
 from . import kitty
 from . import sixel
 from .terminal import get_terminal_size
-from .utils import Size
 from .utils import pad_ratio
 
 
 def _do_show(args):
     if args.size is not None:
-        size = Size(args.columns, args.rows)
+        size = (args.columns, args.rows)
     else:
         size = None
 
@@ -28,12 +27,12 @@ def _do_show(args):
 
 def _do_info(args):
     size = get_terminal_size()
-    print(f'Rows:       {size.cells.height}')
-    print(f'Columns:    {size.cells.width}')
-    print(f'Width:      {size.pixels.width}')
-    print(f'Height:     {size.pixels.height}')
-    print(f'CellWidth:  {size.cell_pixels.width}')
-    print(f'CellHeight: {size.cell_pixels.height}')
+    print(f'Rows:       {size.cells[0]}')
+    print(f'Columns:    {size.cells[0]}')
+    print(f'Width:      {size.pixels[0]}')
+    print(f'Height:     {size.pixels[1]}')
+    print(f'CellWidth:  {size.cell_pixels[0]}')
+    print(f'CellHeight: {size.cell_pixels[1]}')
 
 
 def _main():
@@ -69,10 +68,11 @@ def _main():
 
 
 def write(image,
-          fout,
+          fout=None,
           scale=None,
           size=None,
           fill=None,
+          move_cursor=True,
           protocol=None):
     """Write given image to the terinal.
 
@@ -88,6 +88,9 @@ def write(image,
     if protocol is None:
         protocol = 'kitty'
 
+    if fout is None:
+        fout = sys.stdout.buffer
+
     if scale is not None:
         image = scale_image(image, scale)
 
@@ -96,7 +99,7 @@ def write(image,
         image = pad_ratio(image, size, terminal_size.cell_pixels)
 
     if protocol == 'kitty':
-        kitty.write(image, fout, size)
+        kitty.write(image, fout, size, move_cursor)
         sys.stdout.buffer.write(b'\n')
     elif protocol == 'sixel':
         sixel.write(image, fout, size)
@@ -105,9 +108,10 @@ def write(image,
 
 
 def write_file(path,
-               fout,
+               fout=None,
                scale=None,
                size=None,
                fill=None,
+               move_cursor=True,
                protocol=None):
-    write(Image.open(path), fout, scale, size, fill, protocol)
+    write(Image.open(path), fout, scale, size, fill, move_cursor, protocol)

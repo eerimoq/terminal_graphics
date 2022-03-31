@@ -3,12 +3,6 @@ from dataclasses import dataclass
 from PIL.ImageOps import pad
 
 
-@dataclass
-class Size:
-    width: int
-    height: int
-
-
 def split_image_horizontally(image, number_of_images):
     """Split given image horizontally into given number of images.
 
@@ -26,10 +20,10 @@ def pad_ratio(image, size, cell_size=None):
     """
 
     if cell_size is None:
-        cell_size = Size(1, 2)
+        cell_size = (1, 2)
 
     image_ratio = image.width / image.height
-    size_ratio = (size.width * cell_size.width) / (size.height * cell_size.height)
+    size_ratio = (size[0] * cell_size[0]) / (size[1] * cell_size[1])
 
     if image_ratio < size_ratio:
         width = int(image.height * size_ratio)

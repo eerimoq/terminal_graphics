@@ -37,34 +37,40 @@ def _write_chunked(fout, data, **cmd):
         cmd.clear()
 
 
-def _write_rgb_rgba(data, width, height, fout, f, size):
+def _write_rgb_rgba(data, width, height, fout, f, size, move_cursor):
     cmd = {}
 
+    if not move_cursor:
+        cmd['C'] = 1
+
     if size is not None:
-        cmd['c'] = size.width
-        cmd['r'] = size.height
+        cmd['c'] = size[0]
+        cmd['r'] = size[1]
 
     _write_chunked(fout, data, a='T', f=f, s=width, v=height, **cmd)
 
 
-def write_rgb(data, width, height, fout, size=None):
-    _write_rgb_rgba(data, width, height, fout, 24, size)
+def write_rgb(data, width, height, fout, size=None, move_cursor=True):
+    _write_rgb_rgba(data, width, height, fout, 24, size, move_cursor)
 
 
-def write_rgba(data, width, height, fout, size=None):
-    _write_rgb_rgba(data, width, height, fout, 32, size)
+def write_rgba(data, width, height, fout, size=None, move_cursor=True):
+    _write_rgb_rgba(data, width, height, fout, 32, size, move_cursor)
 
 
-def write_png(data, fout, size=None):
+def write_png(data, fout, size=None, move_cursor=True):
     cmd = {}
 
+    if not move_cursor:
+        cmd['C'] = 1
+
     if size is not None:
-        cmd['c'] = size.width
-        cmd['r'] = size.height
+        cmd['c'] = size[0]
+        cmd['r'] = size[1]
 
     _write_chunked(fout, data, a='T', f=100, **cmd)
 
 
-def write(image, fout, size=None):
+def write(image, fout, size=None, move_cursor=True):
     image = image.convert('RGBA')
-    write_rgba(numpy.array(image), image.width, image.height, fout, size)
+    write_rgba(numpy.array(image), image.width, image.height, fout, size, move_cursor)
