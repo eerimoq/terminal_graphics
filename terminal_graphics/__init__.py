@@ -31,10 +31,14 @@ def _do_info(args):
     size = get_terminal_size()
     print(f'Rows:       {size.cells[1]}')
     print(f'Columns:    {size.cells[0]}')
-    print(f'Width:      {size.pixels[0]}')
-    print(f'Height:     {size.pixels[1]}')
-    print(f'CellWidth:  {size.cell_pixels[0]}')
-    print(f'CellHeight: {size.cell_pixels[1]}')
+
+    if size.pixels is not None:
+        print(f'Width:      {size.pixels[0]}')
+        print(f'Height:     {size.pixels[1]}')
+
+    if size.cell_pixels is not None:
+        print(f'CellWidth:  {size.cell_pixels[0]}')
+        print(f'CellHeight: {size.cell_pixels[1]}')
 
 
 def _main():

@@ -8,8 +8,8 @@ from typing import Tuple
 @dataclass
 class TerminalSize:
     cells: Tuple[int, int]
-    pixels: Tuple[int, int]
-    cell_pixels: Tuple[int, int]
+    pixels: Tuple[int, int] = None
+    cell_pixels: Tuple[int, int] = None
 
 
 def get_terminal_size():
@@ -19,6 +19,10 @@ def get_terminal_size():
                     termios.TIOCGWINSZ,
                     struct.pack('HHHH', 0, 0, 0, 0)))
 
-    return TerminalSize((columns, rows),
-                        (width, height),
-                        (width // columns, height // rows))
+    terminal_size = TerminalSize((columns, rows))
+
+    if width > 0 and height > 0:
+        terminal_size.pixels = (width, height)
+        terminal_size.cell_pixels = (width // columns, height // rows)
+
+    return terminal_size
