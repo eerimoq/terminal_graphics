@@ -22,7 +22,9 @@ def _do_show(args):
                    args.scale,
                    size,
                    args.fill,
+                   True,
                    args.protocol)
+        sys.stdout.buffer.write(b'\n')
 
 
 def _do_info(args):
@@ -100,7 +102,6 @@ def write(image,
 
     if protocol == 'kitty':
         kitty.write(image, fout, size, move_cursor)
-        sys.stdout.buffer.write(b'\n')
     elif protocol == 'sixel':
         sixel.write(image, fout, size)
     else:
