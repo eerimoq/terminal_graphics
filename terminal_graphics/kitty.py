@@ -2,12 +2,10 @@
 # https://sw.kovidgoyal.net/kitty/graphics-protocol/
 #
 
-import sys
 from base64 import b64encode
 from io import BytesIO
 
 import numpy
-from PIL import Image
 
 
 def _serialize_gr_command(payload, **cmd):

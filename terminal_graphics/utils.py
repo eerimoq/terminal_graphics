@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from PIL.ImageOps import pad
 
 
