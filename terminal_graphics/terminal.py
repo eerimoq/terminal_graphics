@@ -62,16 +62,16 @@ def get_size():
 
 def get_graphics_info():
     return GraphicsInfo(os.environ.get('COLORTERM') == 'truecolor',
-                        get_graphics_sixel_info(),
-                        get_graphics_kitty_info(),
-                        get_graphics_iterm_info())
+                        get_sixel_graphics_info(),
+                        get_kitty_graphics_info(),
+                        get_iterm_graphics_info())
 
 
-def get_graphics_sixel_info():
+def get_sixel_graphics_info():
     return SixelGraphicsInfo(False)
 
 
-def get_graphics_kitty_info():
+def get_kitty_graphics_info():
     term = os.environ.get('TERM')
     is_supported = term is not None and 'kitty' in term
     transmission_mediums = []
@@ -82,7 +82,7 @@ def get_graphics_kitty_info():
     return KittyGraphicsInfo(is_supported, transmission_mediums)
 
 
-def get_graphics_iterm_info():
+def get_iterm_graphics_info():
     program = os.environ.get('TERM_PROGRAM')
     is_supported = False
 
