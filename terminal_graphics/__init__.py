@@ -6,9 +6,9 @@ from PIL.ImageOps import scale as scale_image
 
 from . import kitty
 from . import sixel
+from .terminal import get_graphics_info
 from .terminal import get_preferred_graphics_protocol
-from .terminal import get_terminal_graphics_info
-from .terminal import get_terminal_size
+from .terminal import get_size as get_terminal_size
 from .utils import pad_ratio
 
 
@@ -49,7 +49,7 @@ def _do_info(args):
         print(f'CellWidth:  {size.cell_pixels[0]}')
         print(f'CellHeight: {size.cell_pixels[1]}')
 
-    graphics_info = get_terminal_graphics_info()
+    graphics_info = get_graphics_info()
     sixel = graphics_info.sixel
     print(f'SixelSupport: {_yes_or_no(sixel.is_supported)}')
     kitty = graphics_info.kitty

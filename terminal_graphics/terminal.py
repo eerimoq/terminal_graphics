@@ -8,64 +8,63 @@ from typing import Tuple
 
 
 @dataclass
-class TerminalSize:
+class Size:
     cells: Tuple[int, int]
     pixels: Tuple[int, int] = None
     cell_pixels: Tuple[int, int] = None
 
 
-def get_terminal_size():
+def get_size():
     rows, columns, width, height = struct.unpack(
         'HHHH',
         fcntl.ioctl(0,
                     termios.TIOCGWINSZ,
                     struct.pack('HHHH', 0, 0, 0, 0)))
 
-    terminal_size = TerminalSize((columns, rows))
+    size = Size((columns, rows))
 
     if width > 0 and height > 0:
-        terminal_size.pixels = (width, height)
-        terminal_size.cell_pixels = (width // columns, height // rows)
+        size.pixels = (width, height)
+        size.cell_pixels = (width // columns, height // rows)
 
-    return terminal_size
+    return size
 
 
 @dataclass
-class TerminalGraphicsKittyInfo:
+class GraphicsKittyInfo:
     is_supported: bool
     transmission_mediums: List[str]
 
 
 @dataclass
-class TerminalGraphicsSixelInfo:
+class GraphicsSixelInfo:
     is_supported: bool
 
 
 @dataclass
-class TerminalGraphicsITermInfo:
+class GraphicsITermInfo:
     is_supported: bool
 
 
 @dataclass
-class TerminalGraphicsInfo:
+class GraphicsInfo:
     has_true_color: bool
-    sixel: TerminalGraphicsSixelInfo
-    kitty: TerminalGraphicsKittyInfo
-    iterm: TerminalGraphicsITermInfo
+    sixel: GraphicsSixelInfo
+    kitty: GraphicsKittyInfo
+    iterm: GraphicsITermInfo
 
-def get_terminal_graphics_info():
-    return TerminalGraphicsInfo(
-        os.environ.get('COLORTERM') == 'truecolor',
-        get_terminal_graphics_sixel_info(),
-        get_terminal_graphics_kitty_info(),
-        get_terminal_graphics_iterm_info())
-
-
-def get_terminal_graphics_sixel_info():
-    return TerminalGraphicsSixelInfo(False)
+def get_graphics_info():
+    return GraphicsInfo(os.environ.get('COLORTERM') == 'truecolor',
+                        get_graphics_sixel_info(),
+                        get_graphics_kitty_info(),
+                        get_graphics_iterm_info())
 
 
-def get_terminal_graphics_kitty_info():
+def get_graphics_sixel_info():
+    return GraphicsSixelInfo(False)
+
+
+def get_graphics_kitty_info():
     term = os.environ.get('TERM')
     is_supported = term is not None and 'kitty' in term
     transmission_mediums = []
@@ -73,11 +72,10 @@ def get_terminal_graphics_kitty_info():
     if is_supported:
         transmission_mediums.append('direct')
 
-    return TerminalGraphicsKittyInfo(is_supported,
-                                             transmission_mediums)
+    return GraphicsKittyInfo(is_supported, transmission_mediums)
 
 
-def get_terminal_graphics_iterm_info():
+def get_graphics_iterm_info():
     program = os.environ.get('TERM_PROGRAM')
     is_supported = False
 
@@ -85,11 +83,11 @@ def get_terminal_graphics_iterm_info():
         if 'iTerm' in program or 'WezTerm' in program or 'mintty' in program:
             is_supported = True
 
-    return TerminalGraphicsITermInfo(is_supported)
+    return GraphicsITermInfo(is_supported)
 
 
 def get_preferred_graphics_protocol():
-    graphics_info = get_terminal_graphics_info()
+    graphics_info = get_graphics_info()
 
     if graphics_info.kitty.is_supported:
         return 'kitty'
