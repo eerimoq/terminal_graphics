@@ -14,19 +14,34 @@ from .utils import pad_ratio
 
 
 def _do_show(args):
+    maximum_size_pixels = None
+
     if args.size is not None:
         size = (args.columns, args.rows)
     else:
         size = None
+        term_size = get_info().size
+
+        if term_size.pixels is not None:
+            maximum_size_pixels = (
+                (term_size.cells[0] - 1) * term_size.cell_pixels[0],
+                (term_size.cells[1] - 2) * term_size.cell_pixels[1])
 
     for file in args.files:
-        write_file(file,
-                   sys.stdout.buffer,
-                   args.scale,
-                   size,
-                   args.fill,
-                   True,
-                   args.protocol)
+        image = Image.open(file)
+
+        if maximum_size_pixels is not None:
+            scale = min(maximum_size_pixels[0] / image.width,
+                        maximum_size_pixels[1] / image.height)
+
+            if scale < 1:
+                image = scale_image(image, scale)
+
+        write(image,
+              sys.stdout.buffer,
+              size,
+              True,
+              args.protocol)
         sys.stdout.buffer.write(b'\n')
 
 
@@ -76,13 +91,7 @@ def _main():
     subparsers.required = True
 
     subparser = subparsers.add_parser('show')
-    subparser.add_argument('--scale',
-                           type=float,
-                           help='Image size scale factor.')
     subparser.add_argument('--size', help='Width and height in cells.')
-    subparser.add_argument('--fill',
-                           action='store_true',
-                           help='Stretch or squish to fill given size.')
     subparser.add_argument('--protocol',
                            help='Protocol to use.')
     subparser.add_argument('files', nargs="+")
@@ -101,9 +110,7 @@ def _main():
 
 def write(image,
           fout=None,
-          scale=None,
           size=None,
-          fill=None,
           move_cursor=True,
           protocol=None):
     """Write given image to the terinal.
@@ -122,10 +129,7 @@ def write(image,
     if fout is None:
         fout = sys.stdout.buffer
 
-    if scale is not None:
-        image = scale_image(image, scale)
-
-    if size is not None and not fill:
+    if size is not None:
         image = pad_ratio(image, size, get_info().size.cell_pixels)
 
     if protocol == 'kitty':
@@ -138,9 +142,7 @@ def write(image,
 
 def write_file(path,
                fout=None,
-               scale=None,
                size=None,
-               fill=None,
                move_cursor=True,
                protocol=None):
-    write(Image.open(path), fout, scale, size, fill, move_cursor, protocol)
+    write(Image.open(path), fout, size, move_cursor, protocol)
