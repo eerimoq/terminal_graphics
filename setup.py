@@ -30,7 +30,8 @@ setup(name='terminal_graphics',
       packages=find_packages(exclude=['tests']),
       install_requires=[
           'Pillow',
-          'numpy'
+          'numpy',
+          'rich'
       ],
       python_requires='>=3.6',
       test_suite="tests",

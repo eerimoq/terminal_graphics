@@ -9,6 +9,8 @@ from . import sixel
 from .terminal import get_info
 from .terminal import get_preferred_graphics_protocol
 from .utils import pad_ratio
+from rich.table import Table
+from rich.console import Console
 
 
 def _do_show(args):
@@ -37,29 +39,32 @@ def _yes_or_no(value):
 
 def _do_info(args):
     info = get_info()
+    table = Table('Name', 'Value')
 
-    print(f'Rows:       {info.size.cells[1]}')
-    print(f'Columns:    {info.size.cells[0]}')
+    table.add_row('Rows', str(info.size.cells[1]))
+    table.add_row('Columns',    str(info.size.cells[0]))
 
     if info.size.pixels is not None:
-        print(f'Width:      {info.size.pixels[0]}')
-        print(f'Height:     {info.size.pixels[1]}')
+        table.add_row('Width',      str(info.size.pixels[0]))
+        table.add_row('Height',     str(info.size.pixels[1]))
 
     if info.size.cell_pixels is not None:
-        print(f'CellWidth:  {info.size.cell_pixels[0]}')
-        print(f'CellHeight: {info.size.cell_pixels[1]}')
+        table.add_row('CellWidth',  str(info.size.cell_pixels[0]))
+        table.add_row('CellHeight', str(info.size.cell_pixels[1]))
 
     sixel = info.graphics.sixel
-    print(f'SixelSupport: {_yes_or_no(sixel.is_supported)}')
+    table.add_row('SixelSupport', _yes_or_no(sixel.is_supported))
     kitty = info.graphics.kitty
-    print(f'KittySupport: {_yes_or_no(kitty.is_supported)}')
+    table.add_row('KittySupport', _yes_or_no(kitty.is_supported))
 
     if kitty.is_supported:
         transmission_mediums = ', '.join(kitty.transmission_mediums)
-        print(f'KittyTransmissionMediums: {transmission_mediums}')
+        table.add_row('KittyTransmissionMediums', transmission_mediums)
 
     iterm = info.graphics.iterm
-    print(f'ITermSupport: {_yes_or_no(iterm.is_supported)}')
+    table.add_row('ITermSupport', _yes_or_no(iterm.is_supported))
+
+    Console().print(table)
 
 
 def _main():
