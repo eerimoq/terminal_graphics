@@ -14,6 +14,36 @@ class Size:
     cell_pixels: Tuple[int, int] = None
 
 
+@dataclass
+class KittyGraphicsInfo:
+    is_supported: bool
+    transmission_mediums: List[str]
+
+
+@dataclass
+class SixelGraphicsInfo:
+    is_supported: bool
+
+
+@dataclass
+class ITermGraphicsInfo:
+    is_supported: bool
+
+
+@dataclass
+class GraphicsInfo:
+    has_true_color: bool
+    sixel: SixelGraphicsInfo
+    kitty: KittyGraphicsInfo
+    iterm: ITermGraphicsInfo
+
+
+@dataclass
+class Info:
+    size: Size
+    graphics: GraphicsInfo
+
+
 def get_size():
     rows, columns, width, height = struct.unpack(
         'HHHH',
@@ -30,29 +60,6 @@ def get_size():
     return size
 
 
-@dataclass
-class GraphicsKittyInfo:
-    is_supported: bool
-    transmission_mediums: List[str]
-
-
-@dataclass
-class GraphicsSixelInfo:
-    is_supported: bool
-
-
-@dataclass
-class GraphicsITermInfo:
-    is_supported: bool
-
-
-@dataclass
-class GraphicsInfo:
-    has_true_color: bool
-    sixel: GraphicsSixelInfo
-    kitty: GraphicsKittyInfo
-    iterm: GraphicsITermInfo
-
 def get_graphics_info():
     return GraphicsInfo(os.environ.get('COLORTERM') == 'truecolor',
                         get_graphics_sixel_info(),
@@ -61,7 +68,7 @@ def get_graphics_info():
 
 
 def get_graphics_sixel_info():
-    return GraphicsSixelInfo(False)
+    return SixelGraphicsInfo(False)
 
 
 def get_graphics_kitty_info():
@@ -72,7 +79,7 @@ def get_graphics_kitty_info():
     if is_supported:
         transmission_mediums.append('direct')
 
-    return GraphicsKittyInfo(is_supported, transmission_mediums)
+    return KittyGraphicsInfo(is_supported, transmission_mediums)
 
 
 def get_graphics_iterm_info():
@@ -83,7 +90,11 @@ def get_graphics_iterm_info():
         if 'iTerm' in program or 'WezTerm' in program or 'mintty' in program:
             is_supported = True
 
-    return GraphicsITermInfo(is_supported)
+    return ITermGraphicsInfo(is_supported)
+
+
+def get_info():
+    return Info(get_size(), get_graphics_info())
 
 
 def get_preferred_graphics_protocol():

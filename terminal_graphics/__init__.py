@@ -6,9 +6,8 @@ from PIL.ImageOps import scale as scale_image
 
 from . import kitty
 from . import sixel
-from .terminal import get_graphics_info
+from .terminal import get_info
 from .terminal import get_preferred_graphics_protocol
-from .terminal import get_size as get_terminal_size
 from .utils import pad_ratio
 
 
@@ -37,29 +36,29 @@ def _yes_or_no(value):
 
 
 def _do_info(args):
-    size = get_terminal_size()
-    print(f'Rows:       {size.cells[1]}')
-    print(f'Columns:    {size.cells[0]}')
+    info = get_info()
 
-    if size.pixels is not None:
-        print(f'Width:      {size.pixels[0]}')
-        print(f'Height:     {size.pixels[1]}')
+    print(f'Rows:       {info.size.cells[1]}')
+    print(f'Columns:    {info.size.cells[0]}')
 
-    if size.cell_pixels is not None:
-        print(f'CellWidth:  {size.cell_pixels[0]}')
-        print(f'CellHeight: {size.cell_pixels[1]}')
+    if info.size.pixels is not None:
+        print(f'Width:      {info.size.pixels[0]}')
+        print(f'Height:     {info.size.pixels[1]}')
 
-    graphics_info = get_graphics_info()
-    sixel = graphics_info.sixel
+    if info.size.cell_pixels is not None:
+        print(f'CellWidth:  {info.size.cell_pixels[0]}')
+        print(f'CellHeight: {info.size.cell_pixels[1]}')
+
+    sixel = info.graphics.sixel
     print(f'SixelSupport: {_yes_or_no(sixel.is_supported)}')
-    kitty = graphics_info.kitty
+    kitty = info.graphics.kitty
     print(f'KittySupport: {_yes_or_no(kitty.is_supported)}')
 
     if kitty.is_supported:
         transmission_mediums = ', '.join(kitty.transmission_mediums)
         print(f'KittyTransmissionMediums: {transmission_mediums}')
 
-    iterm = graphics_info.iterm
+    iterm = info.graphics.iterm
     print(f'ITermSupport: {_yes_or_no(iterm.is_supported)}')
 
 
@@ -122,8 +121,7 @@ def write(image,
         image = scale_image(image, scale)
 
     if size is not None and not fill:
-        terminal_size = get_terminal_size()
-        image = pad_ratio(image, size, terminal_size.cell_pixels)
+        image = pad_ratio(image, size, get_info().size.cell_pixels)
 
     if protocol == 'kitty':
         kitty.write(image, fout, size, move_cursor)
