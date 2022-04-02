@@ -6,6 +6,7 @@ from PIL.ImageOps import scale as scale_image
 
 from . import kitty
 from . import sixel
+from .terminal import get_terminal_graphics_protocol_info
 from .terminal import get_terminal_size
 from .utils import pad_ratio
 
@@ -27,6 +28,13 @@ def _do_show(args):
         sys.stdout.buffer.write(b'\n')
 
 
+def _yes_or_no(value):
+    if value:
+        return 'yes'
+    else:
+        return 'no'
+
+
 def _do_info(args):
     size = get_terminal_size()
     print(f'Rows:       {size.cells[1]}')
@@ -39,6 +47,19 @@ def _do_info(args):
     if size.cell_pixels is not None:
         print(f'CellWidth:  {size.cell_pixels[0]}')
         print(f'CellHeight: {size.cell_pixels[1]}')
+
+    graphics_protocol_info = get_terminal_graphics_protocol_info()
+    sixel = graphics_protocol_info.sixel
+    print(f'SixelSupport: {_yes_or_no(sixel.is_supported)}')
+    kitty = graphics_protocol_info.kitty
+    print(f'KittySupport: {_yes_or_no(kitty.is_supported)}')
+
+    if kitty.is_supported:
+        transmission_mediums = ', '.join(kitty.transmission_mediums)
+        print(f'KittyTransmissionMediums: {transmission_mediums}')
+
+    iterm = graphics_protocol_info.iterm
+    print(f'ITermSupport: {_yes_or_no(iterm.is_supported)}')
 
 
 def _main():
