@@ -7,7 +7,7 @@ from PIL.ImageOps import scale as scale_image
 from . import kitty
 from . import sixel
 from .terminal import get_preferred_graphics_protocol
-from .terminal import get_terminal_graphics_protocol_info
+from .terminal import get_terminal_graphics_info
 from .terminal import get_terminal_size
 from .utils import pad_ratio
 
@@ -49,17 +49,17 @@ def _do_info(args):
         print(f'CellWidth:  {size.cell_pixels[0]}')
         print(f'CellHeight: {size.cell_pixels[1]}')
 
-    graphics_protocol_info = get_terminal_graphics_protocol_info()
-    sixel = graphics_protocol_info.sixel
+    graphics_info = get_terminal_graphics_info()
+    sixel = graphics_info.sixel
     print(f'SixelSupport: {_yes_or_no(sixel.is_supported)}')
-    kitty = graphics_protocol_info.kitty
+    kitty = graphics_info.kitty
     print(f'KittySupport: {_yes_or_no(kitty.is_supported)}')
 
     if kitty.is_supported:
         transmission_mediums = ', '.join(kitty.transmission_mediums)
         print(f'KittyTransmissionMediums: {transmission_mediums}')
 
-    iterm = graphics_protocol_info.iterm
+    iterm = graphics_info.iterm
     print(f'ITermSupport: {_yes_or_no(iterm.is_supported)}')
 
 
@@ -130,7 +130,7 @@ def write(image,
     elif protocol == 'sixel':
         sixel.write(image, fout, size)
     else:
-        raise Exception(f"Unsupported protocol '{protocol}'.")
+        raise Exception(f"Unsupported graphics protocol '{protocol}'.")
 
 
 def write_file(path,
