@@ -3,14 +3,14 @@ import sys
 
 from PIL import Image
 from PIL.ImageOps import scale as scale_image
+from rich.console import Console
+from rich.table import Table
 
 from . import kitty
 from . import sixel
 from .terminal import get_info
 from .terminal import get_preferred_graphics_protocol
 from .utils import pad_ratio
-from rich.table import Table
-from rich.console import Console
 
 
 def _do_show(args):
