@@ -6,6 +6,7 @@ from PIL.ImageOps import scale as scale_image
 
 from . import kitty
 from . import sixel
+from .terminal import get_preferred_graphics_protocol
 from .terminal import get_terminal_graphics_protocol_info
 from .terminal import get_terminal_size
 from .utils import pad_ratio
@@ -111,9 +112,8 @@ def write(image,
 
     """
 
-    # Remove later.
     if protocol is None:
-        protocol = 'kitty'
+        protocol = get_preferred_graphics_protocol()
 
     if fout is None:
         fout = sys.stdout.buffer
@@ -130,7 +130,7 @@ def write(image,
     elif protocol == 'sixel':
         sixel.write(image, fout, size)
     else:
-        raise Exception(f"Bad protocol '{protocol}.'")
+        raise Exception(f"Unsupported protocol '{protocol}'.")
 
 
 def write_file(path,

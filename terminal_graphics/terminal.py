@@ -84,3 +84,16 @@ def get_terminal_graphics_iterm_protocol_info():
             is_supported = True
 
     return TerminalGraphicsITermProtocolInfo(is_supported)
+
+
+def get_preferred_graphics_protocol():
+    graphics_protocol_info = get_terminal_graphics_protocol_info()
+
+    if graphics_protocol_info.kitty.is_supported:
+        return 'kitty'
+    elif graphics_protocol_info.iterm.is_supported:
+        return 'iterm'
+    elif graphics_protocol_info.sixel.is_supported:
+        return 'sixel'
+    else:
+        return 'text'
