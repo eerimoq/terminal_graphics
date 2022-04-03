@@ -11,7 +11,7 @@ Examples
 Command line
 ------------
 
-.. image:: docs/images/example.png
+.. image:: https://github.com/eerimoq/terminal_graphics/raw/main/docs/images/example.png
    :width: 60%
 
 .. code-block:: text
