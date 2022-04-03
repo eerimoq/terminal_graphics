@@ -31,3 +31,4 @@ Scripting
    from terminal_graphics import write_file
 
    write_file('examples/lenna.png')
+   print()
