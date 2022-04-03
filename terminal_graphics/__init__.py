@@ -17,7 +17,7 @@ def _do_show(args):
     maximum_size_pixels = None
 
     if args.size is not None:
-        size = (args.columns, args.rows)
+        size = tuple([int(v) for v in args.size.split('x')])
     else:
         size = None
         term_size = get_info().size
