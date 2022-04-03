@@ -12,6 +12,7 @@ Command line
 ------------
 
 .. image:: docs/images/example.png
+   :width: 60%
 
 .. code-block:: text
 
