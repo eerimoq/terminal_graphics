@@ -3,9 +3,7 @@ About
 
 Make terminal graphics fun and easy! :P
 
-.. warning::
-
-   This project is far from useful yet! Stay tuned!
+🚧 🚧 🚧 🚧 🚧 **Under construction - DO NOT USE** 🚧 🚧 🚧 🚧 🚧
 
 Examples
 ========
