@@ -1,11 +1,13 @@
 import argparse
 import sys
+from io import BytesIO
 
 from PIL import Image
 from PIL.ImageOps import scale as scale_image
 from rich.console import Console
 from rich.table import Table
 
+from . import iterm
 from . import kitty
 from . import sixel
 from .terminal import get_info
@@ -134,6 +136,10 @@ def write(image,
 
     if protocol == 'kitty':
         kitty.write(image, fout, size, move_cursor)
+    elif protocol == 'iterm':
+        png = BytesIO()
+        image.save(png, 'png')
+        iterm.write(png.getvalue(), fout)
     elif protocol == 'sixel':
         sixel.write(image, fout, size)
     else:
