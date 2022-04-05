@@ -11,14 +11,14 @@ import numpy
 def _serialize_gr_command(payload, **cmd):
     cmd = ','.join(f'{k}={v}' for k, v in cmd.items())
     data = []
-    data.append(b'\033_G')
+    data.append(b'\x1b_G')
     data.append(cmd.encode('ascii'))
 
     if payload:
         data.append(b';')
         data.append(payload)
 
-    data.append(b'\033\\')
+    data.append(b'\x1b\\')
 
     return b''.join(data)
 
@@ -72,3 +72,15 @@ def write_png(data, fout, size=None, move_cursor=True):
 def write(image, fout, size=None, move_cursor=True):
     image = image.convert('RGBA')
     write_rgba(numpy.array(image), image.width, image.height, fout, size, move_cursor)
+
+
+def delete_all_on_screen(fout):
+    fout.write(b'\x1b_Ga=d\x1b\\')
+
+
+def delete_all_intersecting_with_cursor(fout):
+    fout.write(b'\x1b_Ga=d,d=c\x1b\\')
+
+
+def delete_all_intersecting_with_cell(fout, row, column):
+    fout.write(f'\x1b_Ga=d,d=p,x={column},y={row}\x1b\\'.encode('utf-8'))
