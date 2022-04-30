@@ -139,7 +139,7 @@ def write(image,
     elif protocol == 'iterm':
         png = BytesIO()
         image.save(png, 'png')
-        iterm.write(png.getvalue(), fout)
+        iterm.write(png.getvalue(), fout, size)
     elif protocol == 'sixel':
         sixel.write(image, fout, size)
     else:
