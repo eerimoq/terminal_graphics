@@ -73,6 +73,7 @@ jobs:
         python-version: 3.9
     - name: Install pypa/build
       run: |
+        pip install -r requirements.txt
         python -m pip install build --user
     - name: Build a binary wheel and a source tarball
       run: |
