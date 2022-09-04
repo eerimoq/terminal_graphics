@@ -140,8 +140,6 @@ def write(image,
         png = BytesIO()
         image.save(png, 'png')
         iterm.write(png.getvalue(), fout, size)
-    elif protocol == 'sixel':
-        sixel.write(image, fout, size)
     else:
         raise Exception(f"Unsupported graphics protocol '{protocol}'.")
 
