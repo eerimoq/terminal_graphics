@@ -1,4 +1,5 @@
 import numpy
+
 from . import ctext
 from .terminal import get_size
 
