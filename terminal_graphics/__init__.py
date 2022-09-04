@@ -10,6 +10,7 @@ from rich.table import Table
 from . import iterm
 from . import kitty
 from . import sixel
+from . import text
 from .terminal import get_info
 from .terminal import get_preferred_graphics_protocol
 from .utils import pad_ratio
@@ -140,6 +141,8 @@ def write(image,
         png = BytesIO()
         image.save(png, 'png')
         iterm.write(png.getvalue(), fout, size)
+    elif protocol == 'text':
+        text.write(image, fout, size)
     else:
         raise Exception(f"Unsupported graphics protocol '{protocol}'.")
 

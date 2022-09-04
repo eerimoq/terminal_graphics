@@ -2,6 +2,8 @@
 
 import re
 
+import numpy
+from setuptools import Extension
 from setuptools import find_packages
 from setuptools import setup
 
@@ -25,6 +27,11 @@ setup(name='terminal_graphics',
           'Pillow',
           'numpy',
           'rich'
+      ],
+      ext_modules=[
+          Extension(name="terminal_graphics.ctext",
+                    sources=["terminal_graphics/ctext.c"],
+                    include_dirs=[numpy.get_include()])
       ],
       python_requires='>=3.6',
       test_suite="tests",
