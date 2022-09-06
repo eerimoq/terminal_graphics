@@ -116,11 +116,9 @@ def write(image,
           size=None,
           move_cursor=True,
           protocol=None):
-    """Write given image to the terinal.
+    """Write given image to given output stream, or stdout by default.
 
     Size is a tuple of width and height in cells.
-
-    Fill is only used if size is given.
 
     Protocol is the terminal protocol to use, for example 'kitty'.
 
