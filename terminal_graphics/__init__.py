@@ -31,7 +31,10 @@ def _do_show(args):
                 (term_size.cells[1] - 2) * term_size.cell_pixels[1])
 
     for file in args.files:
-        image = Image.open(file)
+        if file == '-':
+            image = Image.open(BytesIO(sys.stdin.buffer.read()))
+        else:
+            image = Image.open(file)
 
         if maximum_size_pixels is not None:
             scale = min(maximum_size_pixels[0] / image.width,

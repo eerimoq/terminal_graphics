@@ -47,7 +47,7 @@ class Info:
 def get_size():
     rows, columns, width, height = struct.unpack(
         'HHHH',
-        fcntl.ioctl(0,
+        fcntl.ioctl(1,
                     termios.TIOCGWINSZ,
                     struct.pack('HHHH', 0, 0, 0, 0)))
 
