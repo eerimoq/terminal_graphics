@@ -43,7 +43,8 @@ static PyObject *m_write(void *self_p,
             printf("\xe2\x96\x84");
         }
 
-        printf("\x1b""[39m\x1b""[49m\n");
+        // ToDo: Move to correct cell, not start of line.
+        printf("\x1b""[39m\x1b""[49m\r\n");
     }
 
     Py_INCREF(Py_None);
