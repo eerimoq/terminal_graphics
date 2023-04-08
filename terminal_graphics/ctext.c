@@ -43,10 +43,15 @@ static PyObject *m_write(void *self_p,
             printf("\xe2\x96\x84");
         }
 
-        // ToDo: Move to correct cell, not start of line.
-        printf("\x1b""[39m\x1b""[49m\r\n");
+        printf("\x1b""[39m\x1b""[49m");
+
+        if ((i + 1) < height / 2) {
+            // ToDo: Move to correct cell, not start of line.
+            printf("\r\n");
+        }
     }
 
+    fflush(stdout);
     Py_INCREF(Py_None);
 
     return (Py_None);
